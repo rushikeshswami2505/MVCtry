@@ -1,0 +1,49 @@
+﻿@model IEnumerable<MVCtry.Models.Product>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+<br />
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            @*<button class="btn btn-primary">Sell</button>
+        <button class="btn btn-secondary">Buy</button>
+        <button class="btn btn-info">Transaction</button>*@
+            <a href="@Url.Action("Sell", "Home")" class="btn btn-primary">Sell</a>
+            <a href="@Url.Action("Buy", "Home")" class="btn btn-secondary">Buy</a>
+            <a href="@Url.Action("Transaction", "Home")" class="btn btn-info">Transaction</a>
+        </div>
+    </div>
+</div>
+<br />
+<table  class="table table-striped" border="2">
+    <tr>
+        <th>ID</th>
+        <th>Item Type</th>
+        <th>Item Size</th>
+        <th>Item Piece</th>
+        <th>Item Price</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    @{
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.id</td>
+                <td>@item.itemtype</td>
+                <td>@item.itemsize</td>
+                <td>@item.itempiece</td>
+                <td>@item.itemprice</td>
+                <td>
+                    <a href="@Url.Action("Edit", "Home", new { id = item.id })" class="btn btn-primary">Edit</a>
+                </td>
+                <td>
+                    <a href="@Url.Action("Delete", "Home", new { id = item.id })" class="btn btn-danger">Delete</a>
+               </td>
+            </tr>
+        }
+    }
+</table>

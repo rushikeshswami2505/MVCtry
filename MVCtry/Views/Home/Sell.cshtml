@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "Sell";
+}
+
+<h2>Sell</h2>
+<div>
+    <form action="@Url.Action("Sell","Home")" method="post">
+        <div class="form-group">
+            <label for="itemtype">Item Type:</label>
+            <input type="text" id="itemtype" name="itemtype" class="form-group" />
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="itemsize">Item Size:</label>
+            <input type="text" id="itemsize" name="itemsize" class="form-group" />
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="itempiece">Item Piece:</label>
+            <input type="text" id="itempiece" name="itempiece" class="form-group" />
+        </div>
+        <br />
+        <button type="submit" class="btn btn-primary">Sell</button>
+        <button type="submit" name="goHome" value="true" class="btn btn-secondary">Go Home</button>
+    </form>
+</div>

@@ -102,11 +102,21 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Data\Product.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Product.cs" />
-    <Compile Include="Models\ProductContext.cs" />
+    <Compile Include="Migrations\202405070604071_InitialCreate.cs" />
+    <Compile Include="Migrations\202405070604071_InitialCreate.Designer.cs">
+      <DependentUpon>202405070604071_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202405080709419_RecreateProductTable.cs" />
+    <Compile Include="Migrations\202405080709419_RecreateProductTable.Designer.cs">
+      <DependentUpon>202405080709419_RecreateProductTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\ProductModel.cs" />
+    <Compile Include="Data\ProductContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +128,8 @@
     <Content Include="Views\Home\Buy.cshtml" />
     <Content Include="Views\Home\Sell.cshtml" />
     <Content Include="Views\Home\Edit.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Home\Signup.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -127,6 +139,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202405070604071_InitialCreate.resx">
+      <DependentUpon>202405070604071_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202405080709419_RecreateProductTable.resx">
+      <DependentUpon>202405080709419_RecreateProductTable.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

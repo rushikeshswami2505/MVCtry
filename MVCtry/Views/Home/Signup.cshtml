@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "Signup";
+}
+
+<h2>Signup</h2>
+<div>
+    <form action="@Url.Action("Signup","Home")" method="post">
+        <div>
+            <label for="email">Email </label>
+            <input type="text" name="email" class="form-group" />
+        </div>
+        <br />
+        <div>
+            <label for="firstname">First Name </label>
+            <input type="text" name="email" class="form-group" />
+        </div>
+        <br />
+        <div>
+            <label for="lastname">Last Name </label>
+            <input type="text" name="lastname" class="form-group" />
+        </div>
+        <br />
+        <div>
+            <label for="gender">Gender </label>
+            <input type="text" name="gender" class="form-group" />
+        </div>
+        <br />
+        <div>
+            <label for="phone">Phone </label>
+            <input type="tel" name="phone" class="form-group" />
+        </div>
+        <br />
+        <div>
+            <label for="password">Password </label>
+            <input type="password" name="password" class="form-group" />
+        </div>
+        <br />
+        <div>
+            <label for="cpassword">Confirm Password </label>
+            <input type="password" name="cpassword" class="form-group" />
+        </div>
+        <br />
+    </form>
+</div>
+

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace MVCtry.Models
+namespace MVCtry.Data
 {
     public class Product
     {
@@ -12,8 +12,7 @@ namespace MVCtry.Models
         public int id { get; set; }
         public string itemtype { get; set; }
         public int itemsize { get; set; }
-        public int itempiece{ get; set; }
+        public int itempiece { get; set; }
         public int itemprice { get; set; }
-
     }
 }

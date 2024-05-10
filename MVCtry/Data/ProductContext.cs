@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Data.Entity;
 
-namespace MVCtry.Models
+namespace MVCtry.Data
 {
     public class ProductContext : DbContext
     {

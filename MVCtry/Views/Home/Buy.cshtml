@@ -1,4 +1,4 @@
-﻿
+﻿@model MVCtry.Models.ProductModel
 @{
     ViewBag.Title = "Buy";
 }
@@ -9,21 +9,25 @@
         <div class="form-group">
             <label for="itemtype">Item Type:</label>
             <input type="text" id="itemtype" name="itemtype" class="form-group" />
+            @Html.ValidationMessageFor(model => Model.itemtype,"",new {@class="text-danger"})
         </div>
         <br />
         <div class="form-group">
             <label for="itemsize">Item Size:</label>
             <input type="text" id="itemsize" name="itemsize" class="form-group" />
+            @Html.ValidationMessageFor(model => Model.itemsize, "", new { @class = "text-danger" })
         </div>
         <br />
         <div class="form-group">
             <label for="itempiece">Item Piece:</label>
             <input type="text" id="itempiece" name="itempiece" class="form-group" />
+            @Html.ValidationMessageFor(model => Model.itempiece, "", new { @class = "text-danger" })
         </div>
         <br />
         <div class="form-group">
             <label for="itemprice">Item Price:</label>
             <input type="text" id="itemprice" name="itemprice" class="form-group" />
+            @Html.ValidationMessageFor(model => Model.itemprice, "", new { @class = "text-danger" })
         </div>
         <br />
         <button type="submit" class="btn btn-primary">Buy</button>

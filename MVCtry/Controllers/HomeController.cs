@@ -5,6 +5,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MVCtry.Models;
+using MVCtry.Data;
+using System.Web.WebPages;
 
 namespace MVCtry.Controllers
 {
@@ -12,10 +14,55 @@ namespace MVCtry.Controllers
     {
         ProductContext db = new ProductContext();
         // GET: Home
+
+        string useremail = "rushi@gmail.com";
+        string userpassword = "123123";
+
+        [Route("Home/Index")]
+        [Route("Home")]
+        // [Route("")]
         public ActionResult Index()
         {
             var data = db.Products.ToList();
             return View(data);
+        }
+        [Route("Home/Buy")]
+
+
+        [Route("")]
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("")]
+        public ActionResult Login(string email,string password)
+        {
+            if(email.IsEmpty() || password.IsEmpty())
+            {
+                if (email.IsEmpty()) ModelState.AddModelError("email", "Please enter email");
+                if (password.IsEmpty()) ModelState.AddModelError("password", "Please enter password");
+            }
+            if (email != useremail)
+            {
+                ModelState.AddModelError("email", "User not found");
+            }
+            else if (password != userpassword)
+            {
+                ModelState.AddModelError("password", "Password did not match");
+            }
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            return RedirectToAction("Index");
+        }
+
+        [Route("Home/Signup")]
+        public ActionResult Signup()
+        {
+            return View();
         }
 
         public ActionResult Buy()
@@ -24,26 +71,8 @@ namespace MVCtry.Controllers
         }
 
         [HttpPost]
-        public ActionResult Buy(Product product, string goHome)
-        {
-            if (goHome != null)
-            {
-                return RedirectToAction("Index");
-            }
-            if (ModelState.IsValid==true) {
-                db.Products.Add(product);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View("Buy",product);
-        }
-        public ActionResult Sell()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult Sell(Product product, string goHome)
+        [Route("Home/Buy")]
+        public ActionResult Buy(ProductModel productModel, string goHome)
         {
             if (goHome != null)
             {
@@ -51,7 +80,32 @@ namespace MVCtry.Controllers
             }
             if (ModelState.IsValid == true)
             {
-                var existingProduct = db.Products.FirstOrDefault(p => p.itemtype == product.itemtype && p.itemsize == product.itemsize);
+                Product product = ModelToDataBase(productModel);
+                db.Products.Add(product);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View("Buy", productModel);
+        }
+
+        [Route("Home/Sell")]
+        public ActionResult Sell()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("Home/Sell")]
+        public ActionResult Sell(ProductModel productModel, string goHome)
+        {
+            if (goHome != null)
+            {
+                return RedirectToAction("Index");
+            }
+            if (ModelState.IsValid == true)
+            {
+                Product product = ModelToDataBase(productModel);
+                var existingProduct = db.Products.FirstOrDefault(p => p.itemtype == productModel.itemtype && p.itemsize == productModel.itemsize);
                 if (existingProduct != null)
                 {
                     existingProduct.itempiece -= product.itempiece;
@@ -59,30 +113,37 @@ namespace MVCtry.Controllers
                     return RedirectToAction("Index");
                 }
             }
-            return View("Sell", product);
+            return View("Sell", productModel);
         }
+
+        [Route("Home/Edit")]
         public ActionResult Edit(int id)
         {
             var row = db.Products.Where(p => p.id == id).FirstOrDefault();
-            return View(row);
+            ProductModel product = DataBaseToModel(row);
+            return View(product);
         }
 
         [HttpPost]
-        public ActionResult Edit(Product product, string goHome) {
+        [Route("Home/Edit")]
+        public ActionResult Edit(ProductModel productModel, string goHome)
+        {
             if (goHome != null)
             {
                 return RedirectToAction("Index");
             }
             if (ModelState.IsValid == true)
             {
+                Product product = ModelToDataBase(productModel);
                 db.Entry(product).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
-                
             }
-            return View("Sell", product);
+            return View("Edit", productModel);
         }
 
+        // [HttpDelete]
+        [Route("Home/Delete")]
         public ActionResult Delete(int id)
         {
             var productToDelete = db.Products.Find(id);
@@ -96,6 +157,27 @@ namespace MVCtry.Controllers
             {
                 return HttpNotFound();
             }
+        }
+        private Product ModelToDataBase(ProductModel productModel)
+        {
+            Product product = new Product();
+            product.id = productModel.id;
+            product.itemtype = productModel.itemtype;
+            product.itemsize = productModel.itemsize;
+            product.itempiece = productModel.itempiece;
+            product.itemprice = productModel.itemprice;
+            return product;
+        }
+
+        private ProductModel DataBaseToModel(Product product)
+        {
+            ProductModel productModel = new ProductModel();
+            productModel.id = product.id;
+            productModel.itemtype = product.itemtype;
+            productModel.itemsize = product.itemsize;
+            productModel.itempiece = product.itempiece;
+            productModel.itemprice = product.itemprice;
+            return productModel;
         }
 
     }

@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+}
+
+<h2>Login</h2>
+<div>
+    <form action="@Url.Action("Login","Home")" method="post">
+        <div class="form-group">
+            <label form="email">Email</label>
+            <input type="text" name="email" class="form-group" />
+            @Html.ValidationMessage("email", new { @class = "text-danger" })
+        </div>
+        <br />
+        <div class="form-group">
+            <label form="password">Password</label>
+            <input type="password" name="password" class="form-group" />
+            @Html.ValidationMessage("password", new { @class = "text-danger" })
+        </div>
+        <br />
+        <div>
+            <a href="@Url.Action("Signup","Home")">New user? signup here</a>
+            <br />
+            <button type="submit" class="btn btn-primary">Login</button>
+        </div>
+</form>
+</div>
+

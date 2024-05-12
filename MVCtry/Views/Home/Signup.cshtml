@@ -13,7 +13,7 @@
         <br />
         <div>
             <label for="firstname">First Name </label>
-            <input type="text" name="email" class="form-group" />
+            <input type="text" name="firstname" class="form-group" />
         </div>
         <br />
         <div>
@@ -23,7 +23,11 @@
         <br />
         <div>
             <label for="gender">Gender </label>
-            <input type="text" name="gender" class="form-group" />
+            <br />
+            <label for="RadioMale">Male</label>
+            <input id="RadioMale" type="radio" name="gender"/>
+            <label for="RadioFemale">Female</label>
+            <input id="RadioFemale" type="radio" name="gender"/>
         </div>
         <br />
         <div>
@@ -39,6 +43,9 @@
         <div>
             <label for="cpassword">Confirm Password </label>
             <input type="password" name="cpassword" class="form-group" />
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary">Signup</button>
         </div>
         <br />
     </form>

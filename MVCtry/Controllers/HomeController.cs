@@ -64,7 +64,21 @@ namespace MVCtry.Controllers
         {
             return View();
         }
+        [HttpPost]
+        [Route("Home/Signup")]
+        public ActionResult Signup(string email, string firstname, string lastname, string gender, string phone, string password, string cpassword)
+        {
+            Response.Write("<h2>Signup Confirmation</h2>");
+            Response.Write("<p>Email: " + email + "</p>");
+            Response.Write("<p>First Name: " + firstname + "</p>");
+            Response.Write("<p>Last Name: " + lastname + "</p>");
+            Response.Write("<p>Gender: " + gender + "</p>");
+            Response.Write("<p>Phone: " + phone + "</p>");
 
+            return RedirectToAction("Login");
+        }
+
+        [Route("Home/Buy")]
         public ActionResult Buy()
         {
             return View();

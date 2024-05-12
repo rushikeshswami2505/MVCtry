@@ -7,6 +7,8 @@ using System.Web.Mvc;
 using MVCtry.Models;
 using MVCtry.Data;
 using System.Web.WebPages;
+using System.Web.Script.Serialization;
+using System.Collections;
 
 namespace MVCtry.Controllers
 {
@@ -15,8 +17,6 @@ namespace MVCtry.Controllers
         ProductContext db = new ProductContext();
         // GET: Home
 
-        string useremail = "rushi@gmail.com";
-        string userpassword = "123123";
 
         [Route("Home/Index")]
         [Route("Home")]
@@ -39,24 +39,32 @@ namespace MVCtry.Controllers
         [Route("")]
         public ActionResult Login(string email,string password)
         {
-            if(email.IsEmpty() || password.IsEmpty())
+            var cookie = Request.Cookies["LoginCookies"];
+            if (email.IsEmpty() || password.IsEmpty())
             {
                 if (email.IsEmpty()) ModelState.AddModelError("email", "Please enter email");
                 if (password.IsEmpty()) ModelState.AddModelError("password", "Please enter password");
-            }
-            if (email != useremail)
-            {
-                ModelState.AddModelError("email", "User not found");
-            }
-            else if (password != userpassword)
-            {
-                ModelState.AddModelError("password", "Password did not match");
             }
             if (!ModelState.IsValid)
             {
                 return View();
             }
-            return RedirectToAction("Index");
+
+            if (cookie != null)
+            {
+                var json = cookie.Value;
+                var jsonSerializer = new JavaScriptSerializer();
+                var userList = jsonSerializer.Deserialize<List<Dictionary<string, string>>>(json);
+                
+                foreach (var user in userList)
+                {
+                    if (user["email"] == email && user["password"] == password)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                }
+            }
+            return View();
         }
 
         [Route("Home/Signup")]
@@ -64,16 +72,34 @@ namespace MVCtry.Controllers
         {
             return View();
         }
+
         [HttpPost]
         [Route("Home/Signup")]
         public ActionResult Signup(string email, string firstname, string lastname, string gender, string phone, string password, string cpassword)
         {
-            Response.Write("<h2>Signup Confirmation</h2>");
-            Response.Write("<p>Email: " + email + "</p>");
-            Response.Write("<p>First Name: " + firstname + "</p>");
-            Response.Write("<p>Last Name: " + lastname + "</p>");
-            Response.Write("<p>Gender: " + gender + "</p>");
-            Response.Write("<p>Phone: " + phone + "</p>");
+            TempData["Email"] = email;
+            TempData["FirstName"] = firstname;
+            TempData["LastName"] = lastname;
+            TempData["Gender"] = gender;
+            TempData["Phone"] = phone;
+            Dictionary<string, string> user = new Dictionary<string, string>
+            {
+                { "email", email },
+                { "firstname", firstname },
+                { "lastname", lastname },
+                { "gender", gender },
+                { "phone", phone },
+                { "password", password },
+                { "cpassword", cpassword }
+            };
+
+            var cookie = Request.Cookies["LoginCookies"] ?? new HttpCookie("LoginCookies");
+            var jsonSerializer = new JavaScriptSerializer();
+            var myList = cookie.Value != null ? jsonSerializer.Deserialize<List<Dictionary<string, string>>>(cookie.Value) : new List<Dictionary<string, string>>();
+            myList.Add(user);
+            var json = jsonSerializer.Serialize(myList);
+            cookie.Value = json;
+            Response.Cookies.Add(cookie);
 
             return RedirectToAction("Login");
         }

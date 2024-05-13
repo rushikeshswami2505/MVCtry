@@ -1,3 +1,4 @@
+using MVCtry.Data;
 using MVCtry.Models;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,6 @@ namespace MVCtry
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-          
         }
     }
 }

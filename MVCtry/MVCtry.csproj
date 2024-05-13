@@ -104,7 +104,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Data\Product.cs" />
     <Compile Include="Data\User.cs" />
-    <Compile Include="Data\UserContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -118,7 +117,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ProductModel.cs" />
-    <Compile Include="Data\ProductContext.cs" />
+    <Compile Include="Data\Context.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

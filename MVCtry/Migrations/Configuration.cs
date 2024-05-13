@@ -5,7 +5,7 @@
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<MVCtry.Data.ProductContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<MVCtry.Data.Context>
     {
         public Configuration()
         {
@@ -13,7 +13,7 @@
             ContextKey = "MVCtry.Models.ProductContext";
         }
 
-        protected override void Seed(MVCtry.Data.ProductContext context)
+        protected override void Seed(MVCtry.Data.Context context)
         {
             //  This method will be called after migrating to the latest version.
 

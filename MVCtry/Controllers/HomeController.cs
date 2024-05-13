@@ -14,10 +14,8 @@ namespace MVCtry.Controllers
 {
     public class HomeController : Controller
     {
-        ProductContext db = new ProductContext();
-        UserContext userdb = new UserContext(); 
+        Context db = new Context();
         // GET: Home
-
         [Route("Home/Index")]
         [Route("Home")]
         public ActionResult Index()
@@ -47,7 +45,7 @@ namespace MVCtry.Controllers
             {
                 return View();
             }
-            var user = userdb.Users.FirstOrDefault(u => u.email == email);
+            var user = db.Users.FirstOrDefault(u => u.email == email);
             if (user != null)
             {
                 if (user.password == password)
@@ -87,8 +85,8 @@ namespace MVCtry.Controllers
             if(ModelState.IsValid)
             {
                 User user = ModelToUser(userModel);
-                userdb.Users.Add(user);
-                userdb.SaveChanges();
+                db.Users.Add(user);
+                db.SaveChanges();
                 return RedirectToAction("Login");
             }
             return View("Signup", userModel);

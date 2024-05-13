@@ -6,8 +6,9 @@ using System.Data.Entity;
 
 namespace MVCtry.Data
 {
-    public class ProductContext : DbContext
+    public class Context : DbContext
     {
         public DbSet<Product> Products { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }

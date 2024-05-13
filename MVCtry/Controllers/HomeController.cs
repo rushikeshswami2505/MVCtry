@@ -15,20 +15,18 @@ namespace MVCtry.Controllers
     public class HomeController : Controller
     {
         ProductContext db = new ProductContext();
+        UserContext userdb = new UserContext(); 
         // GET: Home
-
 
         [Route("Home/Index")]
         [Route("Home")]
-        // [Route("")]
         public ActionResult Index()
         {
             var data = db.Products.ToList();
             return View(data);
         }
-        [Route("Home/Buy")]
 
-
+        [Route("Home/Login")]
         [Route("")]
         public ActionResult Login()
         {
@@ -39,32 +37,41 @@ namespace MVCtry.Controllers
         [Route("")]
         public ActionResult Login(string email,string password)
         {
-            var cookie = Request.Cookies["LoginCookies"];
             if (email.IsEmpty() || password.IsEmpty())
             {
                 if (email.IsEmpty()) ModelState.AddModelError("email", "Please enter email");
                 if (password.IsEmpty()) ModelState.AddModelError("password", "Please enter password");
+                return View();
             }
             if (!ModelState.IsValid)
             {
                 return View();
             }
-
-            if (cookie != null)
+            var user = userdb.Users.FirstOrDefault(u => u.email == email);
+            if (user != null)
             {
-                var json = cookie.Value;
-                var jsonSerializer = new JavaScriptSerializer();
-                var userList = jsonSerializer.Deserialize<List<Dictionary<string, string>>>(json);
-                
-                foreach (var user in userList)
+                if (user.password == password)
                 {
-                    if (user["email"] == email && user["password"] == password)
-                    {
-                        return RedirectToAction("Index");
-                    }
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ModelState.AddModelError("password", "Incorrect password");
+                    return View();
                 }
             }
-            return View();
+            else
+            {
+                ModelState.AddModelError("email", "User does not exist");
+                return View();
+            }
+        }
+        [HttpPost]
+        [Route("Home/Logout")]
+        public ActionResult Logout()
+        {
+            Session.Clear();
+            return RedirectToAction("Login");
         }
 
         [Route("Home/Signup")]
@@ -75,33 +82,27 @@ namespace MVCtry.Controllers
 
         [HttpPost]
         [Route("Home/Signup")]
-        public ActionResult Signup(string email, string firstname, string lastname, string gender, string phone, string password, string cpassword)
-        {
-            TempData["Email"] = email;
-            TempData["FirstName"] = firstname;
-            TempData["LastName"] = lastname;
-            TempData["Gender"] = gender;
-            TempData["Phone"] = phone;
-            Dictionary<string, string> user = new Dictionary<string, string>
+        public ActionResult Signup(UserModel userModel)
+        {   
+            if(ModelState.IsValid)
             {
-                { "email", email },
-                { "firstname", firstname },
-                { "lastname", lastname },
-                { "gender", gender },
-                { "phone", phone },
-                { "password", password },
-                { "cpassword", cpassword }
-            };
-
-            var cookie = Request.Cookies["LoginCookies"] ?? new HttpCookie("LoginCookies");
-            var jsonSerializer = new JavaScriptSerializer();
-            var myList = cookie.Value != null ? jsonSerializer.Deserialize<List<Dictionary<string, string>>>(cookie.Value) : new List<Dictionary<string, string>>();
-            myList.Add(user);
-            var json = jsonSerializer.Serialize(myList);
-            cookie.Value = json;
-            Response.Cookies.Add(cookie);
-
-            return RedirectToAction("Login");
+                User user = ModelToUser(userModel);
+                userdb.Users.Add(user);
+                userdb.SaveChanges();
+                return RedirectToAction("Login");
+            }
+            return View("Signup", userModel);
+        }
+        private User ModelToUser(UserModel userModel)
+        {
+            User user = new User();
+            user.email = userModel.email;
+            user.firstname = userModel.firstname;
+            user.lastname = userModel.lastname;
+            user.gender = userModel.gender;
+            user.phone = userModel.phone;
+            user.password = userModel.password;
+            return user;
         }
 
         [Route("Home/Buy")]
@@ -118,12 +119,12 @@ namespace MVCtry.Controllers
             {
                 return RedirectToAction("Index");
             }
-            if (ModelState.IsValid == true)
+            if (ModelState.IsValid)
             {
-                Product product = ModelToDataBase(productModel);
+                Product product = ModelToProduct(productModel);
                 db.Products.Add(product);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                // return RedirectToAction("Index");
             }
             return View("Buy", productModel);
         }
@@ -144,13 +145,13 @@ namespace MVCtry.Controllers
             }
             if (ModelState.IsValid == true)
             {
-                Product product = ModelToDataBase(productModel);
+                Product product = ModelToProduct(productModel);
                 var existingProduct = db.Products.FirstOrDefault(p => p.itemtype == productModel.itemtype && p.itemsize == productModel.itemsize);
                 if (existingProduct != null)
                 {
                     existingProduct.itempiece -= product.itempiece;
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+                    // return RedirectToAction("Index");
                 }
             }
             return View("Sell", productModel);
@@ -160,7 +161,7 @@ namespace MVCtry.Controllers
         public ActionResult Edit(int id)
         {
             var row = db.Products.Where(p => p.id == id).FirstOrDefault();
-            ProductModel product = DataBaseToModel(row);
+            ProductModel product = ProductToModel(row);
             return View(product);
         }
 
@@ -174,7 +175,7 @@ namespace MVCtry.Controllers
             }
             if (ModelState.IsValid == true)
             {
-                Product product = ModelToDataBase(productModel);
+                Product product = ModelToProduct(productModel);
                 db.Entry(product).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -182,7 +183,6 @@ namespace MVCtry.Controllers
             return View("Edit", productModel);
         }
 
-        // [HttpDelete]
         [Route("Home/Delete")]
         public ActionResult Delete(int id)
         {
@@ -198,7 +198,7 @@ namespace MVCtry.Controllers
                 return HttpNotFound();
             }
         }
-        private Product ModelToDataBase(ProductModel productModel)
+        private Product ModelToProduct(ProductModel productModel)
         {
             Product product = new Product();
             product.id = productModel.id;
@@ -209,7 +209,7 @@ namespace MVCtry.Controllers
             return product;
         }
 
-        private ProductModel DataBaseToModel(Product product)
+        private ProductModel ProductToModel(Product product)
         {
             ProductModel productModel = new ProductModel();
             productModel.id = product.id;

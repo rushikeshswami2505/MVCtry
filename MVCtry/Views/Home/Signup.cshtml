@@ -1,4 +1,4 @@
-﻿
+﻿@model MVCtry.Models.UserModel
 @{
     ViewBag.Title = "Signup";
 }
@@ -9,16 +9,21 @@
         <div>
             <label for="email">Email </label>
             <input type="text" name="email" class="form-group" />
+            @Html.ValidationMessageFor(model => Model.email, "", new { @class = "text-danger" })
+
         </div>
         <br />
         <div>
             <label for="firstname">First Name </label>
             <input type="text" name="firstname" class="form-group" />
+            @Html.ValidationMessageFor(model => Model.firstname, "", new { @class = "text-danger" })
+
         </div>
         <br />
         <div>
             <label for="lastname">Last Name </label>
             <input type="text" name="lastname" class="form-group" />
+            @Html.ValidationMessageFor(model => Model.lastname, "", new { @class = "text-danger" })
         </div>
         <br />
         <div>
@@ -28,23 +33,31 @@
             <input id="RadioMale" type="radio" name="gender" value="Male" />
             <label for="RadioFemale">Female</label>
             <input id="RadioFemale" type="radio" name="gender" value="Female" />
+            @Html.ValidationMessageFor(model => Model.gender, "", new { @class = "text-danger" })
         </div>
         <br />
         <div>
             <label for="phone">Phone </label>
             <input type="tel" name="phone" class="form-group" />
+            @Html.ValidationMessageFor(model => Model.phone, "", new { @class = "text-danger" })
         </div>
         <br />
         <div>
             <label for="password">Password </label>
             <input type="password" name="password" class="form-group" />
+            @Html.ValidationMessageFor(model => Model.password, "", new { @class = "text-danger" })
         </div>
         <br />
         <div>
             <label for="cpassword">Confirm Password </label>
             <input type="password" name="cpassword" class="form-group" />
+            @Html.ValidationMessageFor(model => Model.cpassword, "", new { @class = "text-danger" })
         </div>
+        <br />
         <div>
+            <a href="@Url.Action("Login","Home")">Already have an account?</a>
+            <br />
+            <br />
             <button type="submit" class="btn btn-primary">Signup</button>
         </div>
         <br />

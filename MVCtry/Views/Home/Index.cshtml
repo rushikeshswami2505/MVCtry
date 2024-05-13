@@ -3,7 +3,12 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<div class="d-flex justify-content-between">
+    <h2>Index</h2>
+    <form action="@Url.Action("Logout", "Home")" method="post">
+        <button type="submit" class="btn btn-dark">Logout</button>
+    </form>
+</div>
 <br />
 <div class="container">
     <div class="row">
